@@ -3,6 +3,8 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove
 
+from src.repositories.postgres.user import UserRepository
+
 main_router = Router()
 
 
@@ -24,12 +26,31 @@ async def cancel_handler(message: Message, state: FSMContext) -> None:
 
 @main_router.message(Command(commands=['login']))
 async def login(message: types.Message, ) -> Message:
-    return await message.answer("Авторизация в боте")
+    await message.answer("Авторизация в системе...")
+
+    if await UserRepository.check_if_user_exists(telegram_id=message.from_user.id):
+        return await message.answer("Пользователь уже авторизован в системе")
+
+    _ = await UserRepository.create_user(telegram_id=message.from_user.id)
+    return await message.answer("Пользователь успешно авторизирован!")
+
+
+@main_router.message(Command(commands=['logout']))
+async def logout(message: types.Message, ) -> Message:
+    await message.answer("Удаление пользователя...")
+    try:
+        await UserRepository.delete_user(telegram_id=message.from_user.id)
+        return await message.answer("Пользователь успешно удален!")
+    except Exception as e:
+        return await message.answer("Пользователь не найден!")
 
 
 @main_router.message(Command(commands=['menu']))
 async def menu(message: types.Message, ) -> Message:
-    return await message.answer("Меню")
+    if not await UserRepository.check_if_user_exists(telegram_id=message.from_user.id):
+        return await message.answer("Пользователь еще не авторизован в системе")
+
+    return await message.answer("Меню", reply_markup=ReplyKeyboardRemove())
 
 
 @main_router.message(Command(commands=['add_channel']))
@@ -49,9 +70,4 @@ async def update_period_channel(message: types.Message, ) -> Message:
 
 @main_router.message(Command(commands=['remove_channel']))
 async def remove_channel(message: types.Message, ) -> Message:
-    return await message.answer("Удалить канал")
-
-
-@main_router.message(Command(commands=['logout']))
-async def logout(message: types.Message, ) -> Message:
     return await message.answer("Удалить канал")

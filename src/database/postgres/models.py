@@ -11,14 +11,14 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    telegram_url = Column(String, unique=True, nullable=False)
+    telegram_id = Column(Integer, unique=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class NewsChannel(Base):
     __tablename__ = 'news_channels'
     id = Column(Integer, primary_key=True)
-    telegram_channel_url = Column(String, unique=True, nullable=False)
+    telegram_url = Column(String, unique=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 
@@ -39,6 +39,6 @@ class News(Base):
     link_to_news = Column(String, unique=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     text = Column(String, nullable=False)
-    summary = Column(String, nullable=False)
+    summary = Column(String, nullable=True)
 
     channel = relationship("NewsChannel", backref="news")
