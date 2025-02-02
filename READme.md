@@ -1,6 +1,6 @@
 # Telegram bot for new summarising
 
-## Схема
+## Schema
 ![img_1.png](docs/readme/img_1.png)
 
 ## Report
