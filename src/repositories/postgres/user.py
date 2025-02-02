@@ -4,7 +4,6 @@ from src.database.postgres.connection import async_session
 from src.database.postgres.models import User
 
 
-
 class UserRepository:
     @staticmethod
     async def create_user(telegram_id: int):
@@ -18,7 +17,10 @@ class UserRepository:
     @staticmethod
     async def check_if_user_exists(telegram_id: int):
         async with async_session() as session:
-            result = await session.execute(select(User).where(User.telegram_id == telegram_id))
+            result = await session.execute(
+                select(User).
+                where(User.telegram_id == telegram_id)
+            )
             if result.scalar_one_or_none():
                 return True
             return False
@@ -32,7 +34,10 @@ class UserRepository:
     @staticmethod
     async def get_user(telegram_id: int):
         async with async_session() as session:
-            result = await session.execute(select(User).where(User.telegram_id == telegram_id))
+            result = await session.execute(
+                select(User).
+                where(User.telegram_id == telegram_id)
+            )
             return result.scalar_one_or_none()
 
     @staticmethod
@@ -45,4 +50,3 @@ class UserRepository:
                 )
             await session.delete(user)
             await session.commit()
-

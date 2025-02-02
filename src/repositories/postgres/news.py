@@ -1,5 +1,3 @@
-from sqlalchemy import select
-
 from src.database.postgres.connection import async_session
 from src.database.postgres.models import News
 

@@ -12,7 +12,7 @@ class UserNewsSubscriptionRepository:
             subscription = UserChannelSubscription(
                 user_id=user_id,
                 channel_id=channel_id,
-            notifications_period=notification_period
+                notifications_period=notification_period
             )
             session.add(subscription)
             await session.commit()
@@ -21,7 +21,9 @@ class UserNewsSubscriptionRepository:
     async def get_subscription(user_id: int, channel_id: int):
         async with async_session() as session:
             result = await session.execute(select(UserChannelSubscription).where(
-                (UserChannelSubscription.user_id == user_id) & (UserChannelSubscription.channel_id == channel_id)))
+                (UserChannelSubscription.user_id == user_id) &
+                (UserChannelSubscription.channel_id == channel_id))
+            )
             return result.scalar_one_or_none()
 
     @staticmethod
@@ -38,10 +40,14 @@ class UserNewsSubscriptionRepository:
     @staticmethod
     async def delete_subscription(user_id: int, channel_id: int):
         async with async_session() as session:
-            result = await UserNewsSubscriptionRepository.get_subscription(user_id,channel_id)
+            result = await UserNewsSubscriptionRepository.get_subscription(
+                user_id=user_id,
+                channel_id=channel_id
+            )
             if not result:
                 raise Exception(
-                    f"No subscription found for user_id {user_id} channel_id {channel_id}"
+                    f"No subscription found for "
+                    f"user_id {user_id} channel_id {channel_id}"
                 )
             await session.delete(result)
             await session.commit()
@@ -49,7 +55,9 @@ class UserNewsSubscriptionRepository:
     @staticmethod
     async def delete_subscriptions_by_user(user_id: int):
         async with async_session() as session:
-            results = await UserNewsSubscriptionRepository.get_subscriptions_by_user(user_id)
+            results = await UserNewsSubscriptionRepository.get_subscriptions_by_user(
+                user_id=user_id
+            )
             if not results:
                 raise Exception(
                     f"No subscription found for user_id {user_id}"

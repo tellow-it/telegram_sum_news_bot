@@ -3,6 +3,7 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove
 
+from core.logger import logger
 from src.repositories.postgres.user import UserRepository
 
 main_router = Router()
@@ -41,7 +42,8 @@ async def logout(message: types.Message, ) -> Message:
     try:
         await UserRepository.delete_user(telegram_id=message.from_user.id)
         return await message.answer("Пользователь успешно удален!")
-    except Exception as e:
+    except Exception as err:
+        logger.error(err)
         return await message.answer("Пользователь не найден!")
 
 

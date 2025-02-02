@@ -24,8 +24,16 @@ class NewsChannel(Base):
 
 class UserChannelSubscription(Base):
     __tablename__ = 'user_channel_subscriptions'
-    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
-    channel_id = Column(Integer, ForeignKey('news_channels.id', ondelete='CASCADE'), primary_key=True)
+    user_id = Column(
+        Integer,
+        ForeignKey('users.id', ondelete='CASCADE'),
+        primary_key=True
+    )
+    channel_id = Column(
+        Integer,
+        ForeignKey('news_channels.id', ondelete='CASCADE'),
+        primary_key=True
+    )
     notifications_period = Column(Integer, nullable=False)
 
     user = relationship("User", backref="subscriptions")

@@ -4,16 +4,13 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.types import BotCommand
 
+from core.config import Settings
 from core.logger import logger
 from src.database.postgres.connection import init_models
 from src.database.redis.connection import redis_client
 from src.handlers import register_base_handlers, bot_commands
 from src.handlers.start_bot.start import start_router
 from src.handlers.main_part_bot.main_part import main_router
-
-
-from core.config import Settings
-
 
 
 async def main():
