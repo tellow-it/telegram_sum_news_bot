@@ -1,5 +1,5 @@
 from sqlalchemy import (
-    Column, Integer, ForeignKey, DateTime, String
+    Column, Integer, ForeignKey, DateTime, String, text
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
@@ -12,14 +12,14 @@ class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
     telegram_id = Column(Integer, unique=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow, server_default=text("TIMEZONE('utc', now())"))
 
 
 class NewsChannel(Base):
     __tablename__ = 'news_channels'
     id = Column(Integer, primary_key=True)
     telegram_url = Column(String, unique=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow, server_default=text("TIMEZONE('utc', now())"))
 
 
 class UserChannelSubscription(Base):
@@ -45,7 +45,7 @@ class News(Base):
     id = Column(Integer, primary_key=True)
     channel_id = Column(Integer, ForeignKey('news_channels.id', ondelete='CASCADE'))
     link_to_news = Column(String, unique=True, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow, server_default=text("TIMEZONE('utc', now())"))
     text = Column(String, nullable=False)
     summary = Column(String, nullable=True)
 

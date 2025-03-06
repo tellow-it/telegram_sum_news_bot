@@ -9,8 +9,8 @@ from core.logger import logger
 from src.database.postgres.connection import init_models
 from src.database.redis.connection import redis_client
 from src.handlers import register_base_handlers, bot_commands
-from src.handlers.start_bot.start import start_router
-from src.handlers.main_part_bot.main_part import main_router
+from src.handlers.auth_bot.auth import auth_router
+from src.handlers.subscription_bot.subscription import subscription_router
 
 
 async def main():
@@ -25,8 +25,8 @@ async def main():
     await bot.set_my_commands(commands_for_bot)
 
     register_base_handlers(dp)
-    dp.include_router(start_router)
-    dp.include_router(main_router)
+    dp.include_router(auth_router)
+    dp.include_router(subscription_router)
 
     await dp.start_polling(bot)
 
