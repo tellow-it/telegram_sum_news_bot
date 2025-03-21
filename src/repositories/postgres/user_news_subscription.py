@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.orm import joinedload
 
 from src.database.postgres.connection import async_session
@@ -15,6 +15,23 @@ class UserNewsSubscriptionRepository:
                 notifications_period=notification_period
             )
             session.add(subscription)
+            await session.commit()
+
+    @staticmethod
+    async def update_subscription(
+            user_id: int,
+            channel_id: int,
+            new_notification_period: int
+    ):
+        async with async_session() as session:
+            await session.execute(
+                (
+                    update(UserChannelSubscription)
+                    .where(UserChannelSubscription.user_id == user_id)
+                    .where(UserChannelSubscription.channel_id == channel_id)
+                    .values(notifications_period=new_notification_period)
+                )
+            )
             await session.commit()
 
     @staticmethod

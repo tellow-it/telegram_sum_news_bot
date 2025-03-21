@@ -37,7 +37,19 @@ def register_base_handlers(router: Router) -> None:
 
     router.message.register(cancel_handler, F.text == "Отмена")
 
-    router.message.register(add_channel, F.text == "Добавить канал")
-    router.message.register(remove_channel, F.text == "Удалить канал")
-    router.message.register(list_channels, F.text == "Список каналов")
-    router.message.register(update_period_channel, F.text == "Изменить период оповещения для канала")
+    router.message.register(
+        list_channels,
+        F.text == "Список каналов"
+    )
+    router.message.register(
+        add_channel,
+        F.text == "Добавить канал"
+    )
+    router.message.register(
+        remove_channel,
+        F.text == "Удалить канал"
+    )
+    router.message.register(
+        update_period_channel,
+        F.text == "Изменить период оповещения для канала"
+    )

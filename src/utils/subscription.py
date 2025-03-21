@@ -6,7 +6,4 @@ def is_valid_url(url):
 
     pattern = re.compile(regex)
 
-    if re.match(pattern, url):
-        return True
-    else:
-        return False
+    return re.match(pattern, url)

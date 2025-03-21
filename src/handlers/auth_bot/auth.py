@@ -1,6 +1,5 @@
-from aiogram import types, Router, F
+from aiogram import types, Router
 from aiogram.filters import Command
-from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, ReplyKeyboardRemove
 from core.logger import logger
 from src.keyboards.utils import menu_kbd
@@ -46,7 +45,8 @@ async def login(message: types.Message, ) -> Message:
     except Exception as e:
         logger.error(e)
         return await message.answer(
-            text="Не удалось создать пользователя. Скорее всего пользователь уже существует!",
+            text="Не удалось создать пользователя. "
+                 "Скорее всего пользователь уже существует!",
             reply_markup=ReplyKeyboardRemove()
         )
 

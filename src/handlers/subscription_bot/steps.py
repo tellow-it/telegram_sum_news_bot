@@ -1,5 +1,6 @@
 from aiogram.fsm.state import StatesGroup, State
 
+
 class AddNewsChannelForm(StatesGroup):
     GET_NEWS_CHANNEL = State()
     GET_NOTIFICATION_PERIOD = State()
