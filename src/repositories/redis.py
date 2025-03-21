@@ -3,12 +3,12 @@ from src.database.redis.connection import redis_client
 
 class RedisRepository:
     @staticmethod
-    async def get_value(key: str = None):
+    async def get_value(key: str):
         value = await redis_client.get(name=key)
         return value.decode() if value else None
 
     @staticmethod
-    async def set_value(key: str = None, value: str = None) -> None:
+    async def set_value(key: str, value: str) -> None:
         await redis_client.set(name=key, value=value)
 
     @staticmethod
