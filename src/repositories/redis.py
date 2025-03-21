@@ -8,7 +8,7 @@ class RedisRepository:
         return value.decode() if value else None
 
     @staticmethod
-    async def set_value(key: str = None, value = None) -> None:
+    async def set_value(key: str = None, value: str = None) -> None:
         await redis_client.set(name=key, value=value)
 
     @staticmethod
