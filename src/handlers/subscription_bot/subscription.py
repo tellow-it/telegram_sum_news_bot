@@ -6,7 +6,8 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from core.logger import logger
 from src.keyboards.subscription import user_subscriptions_kbd
 from src.keyboards.utils import cancel_kbd, menu_kbd
-from src.repositories.postgres.news_channel import NewsChannelRepository
+
+from src.repositories.postgres.channel import ChannelRepository
 from src.repositories.postgres.user import UserRepository
 from src.handlers.subscription_bot.steps import (
     AddNewsChannelForm,
@@ -52,7 +53,7 @@ async def get_news_channel_for_adding_channel(
             value=message.text
         )
         await message.answer(
-            text="Введите период оповещения для данного канала",
+            text="Введите период оповещения в минутах для данного канала",
             reply_markup=cancel_kbd()
         )
         await state.set_state(AddNewsChannelForm.GET_NOTIFICATION_PERIOD)
@@ -87,7 +88,7 @@ async def get_notification_period_for_adding_channel(
             f'add_channel:period:user_id:{message.from_user.id}')
         try:
             user_db = await UserRepository.get_user(telegram_id=message.from_user.id)
-            news_channel = await NewsChannelRepository.create_news_channel(
+            news_channel = await ChannelRepository.create_channel(
                 telegram_url=name_news_channel_from_user
             )
             _ = await UserNewsSubscriptionRepository.add_subscription(
@@ -102,7 +103,7 @@ async def get_notification_period_for_adding_channel(
             await state.clear()
         except Exception as e:
             logger.error(e)
-            await message.answer(
+            return await message.answer(
                 text="Не удалось добавить подписку! "
                      "Возможного для данного пользователя "
                      "подписка на этот канал уже добавлена",
@@ -141,9 +142,11 @@ async def list_channels(message: types.Message, state: FSMContext) -> Message:
     )
     text = ""
     for subscription in subscriptions:
+        join_status_text = "Да" if subscription.channel.join_status else "Нет"
         text += (
             f"Ссылка на канал: {subscription.channel.telegram_url}\n"
-            f"Период оповещения: {subscription.notifications_period}\n\n"
+            f"Период оповещения в минутах: {subscription.notifications_period}\n"
+            f"Канал доступен для сбора: {join_status_text}\n"
         )
 
     await message.answer(
@@ -215,7 +218,7 @@ async def get_news_channel_for_update(message: types.Message, state: FSMContext)
         value=selected_channel_id
     )
     await message.answer(
-        text="Введите новый период оповещения",
+        text="Введите новый период оповещения в минутах",
         reply_markup=cancel_kbd()
     )
     await state.set_state(UpdateNotificationPeriodForm.GET_NEW_NOTIFICATION_PERIOD)

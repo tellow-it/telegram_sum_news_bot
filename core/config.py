@@ -21,3 +21,7 @@ class Settings:
          f"{DB_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}")
     # redis
     REDIS_PORT = os.getenv("REDIS_PORT")
+    # scraper
+    API_ID = os.getenv("API_ID")
+    API_HASH = os.getenv("API_HASH")
+    SESSION_NAME = os.getenv("SESSION_NAME")

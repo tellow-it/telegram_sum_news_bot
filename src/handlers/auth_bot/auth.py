@@ -37,7 +37,10 @@ async def login(message: types.Message, ) -> Message:
         )
 
     try:
-        _ = await UserRepository.create_user(telegram_id=message.from_user.id)
+        _ = await UserRepository.create_user(
+            telegram_id=message.from_user.id,
+            chat_id=message.chat.id,
+        )
         return await message.answer(
             text="Пользователь успешно авторизирован!",
             reply_markup=menu_kbd()

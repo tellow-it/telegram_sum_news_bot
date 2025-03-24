@@ -6,12 +6,11 @@ from src.database.postgres.models import User
 
 class UserRepository:
     @staticmethod
-    async def create_user(telegram_id: int):
+    async def create_user(telegram_id: int, chat_id: int):
         async with async_session() as session:
-            user = User(telegram_id=telegram_id)
+            user = User(id=telegram_id, chat_id=chat_id)
             session.add(user)
             await session.commit()
-            await session.refresh(user)
             return user
 
     @staticmethod
@@ -19,7 +18,7 @@ class UserRepository:
         async with async_session() as session:
             result = await session.execute(
                 select(User).
-                where(User.telegram_id == telegram_id)
+                where(User.id == telegram_id)
             )
             if result.scalar_one_or_none():
                 return True
@@ -36,7 +35,7 @@ class UserRepository:
         async with async_session() as session:
             result = await session.execute(
                 select(User).
-                where(User.telegram_id == telegram_id)
+                where(User.id == telegram_id)
             )
             return result.scalar_one_or_none()
 

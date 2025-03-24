@@ -55,6 +55,16 @@ class UserNewsSubscriptionRepository:
             return subscriptions
 
     @staticmethod
+    async def get_users_subs_by_channel(channel_id: int):
+        async with async_session() as session:
+            result = await session.execute(select(UserChannelSubscription).where(
+                (UserChannelSubscription.channel_id == channel_id)
+            )
+            )
+            subscriptions = result.unique().scalars().all()
+            return subscriptions
+
+    @staticmethod
     async def delete_subscription(user_id: int, channel_id: int):
         async with async_session() as session:
             result = await UserNewsSubscriptionRepository.get_subscription(

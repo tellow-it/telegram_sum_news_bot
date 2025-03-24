@@ -12,13 +12,14 @@ from src.handlers import register_base_handlers, bot_commands
 from src.handlers.auth_bot.auth import auth_router
 from src.handlers.subscription_bot.subscription import subscription_router
 
+# Объект бота
+bot = Bot(token=Settings.BOT_TOKEN)
+
 
 async def main():
     await init_models()
-    # Объект бота
-    dp = Dispatcher(storage=RedisStorage(redis_client))
-    bot = Bot(token=Settings.BOT_TOKEN)
     # Диспетчер
+    dp = Dispatcher(storage=RedisStorage(redis_client))
     commands_for_bot = []
     for cmd in bot_commands:
         commands_for_bot.append(BotCommand(command=cmd[0], description=cmd[1]))
