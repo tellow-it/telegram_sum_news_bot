@@ -25,8 +25,8 @@ This report covers only the part related to writing the bot, the ml model is in 
 
 ### Further steps
 
-1. Develop a method /update_period_channel - done at 21.03.2025
-2. Develop a channel passage block and save the news to the database done at 22.03.2025
+1. Develop a method /update_period_channel - done at 14-21.03.2025
+2. Develop a channel passage block and save the news to the database done at 14-22.03.2025
 3. Write GET requests to get the results of the summation from the model - deleted task
 4. Develop a news distribution block for users done at 24.03.2025
 5. Deploying the system on a VPS server done at 25.03.2025
